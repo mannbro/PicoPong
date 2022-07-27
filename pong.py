@@ -11,6 +11,8 @@ PADDLE_HEIGHT=20
 controller1=ADC(26)
 controller2=ADC(27)
 startButton = Pin(22, Pin.IN)
+buzzer = Pin(15, Pin.OUT)
+buzzer.value(0)
 
 #Screen initialization
 i2c=I2C(0,sda=Pin(0), scl=Pin(1), freq=400000)
@@ -89,6 +91,7 @@ def paddleCollition(playerNo):
         #The further to the edge, the bigger change of direction
         yDirModifier=(ball["yPos"]-(PADDLE_HEIGHT/2)-player["paddlePos"])/5
         ball["yDir"]=ball["yDir"]+yDirModifier
+        return True
     else:
         #SCORE!!!
         scorer["score"]+=1
@@ -130,6 +133,7 @@ def paddleCollition(playerNo):
             
             #Reset the ball and resume the game
             initBall()
+        return False
 
 def gameLoop():
     while True:
@@ -137,23 +141,31 @@ def gameLoop():
         player1["paddlePos"]=int((player1["controller"].read_u16()/1024)-(PADDLE_HEIGHT/2))
         player2["paddlePos"]=int((player2["controller"].read_u16()/1024)-(PADDLE_HEIGHT/2))
 
+        buzz=False
+
         #If ball at left edge
         if ball["xPos"]<1:
             #Check if collition with Player 1 paddle
-            paddleCollition(1)
+            if paddleCollition(1)==True:
+                buzz=True
         #If ball at right edge
         if ball["xPos"]>DISPLAY_WIDTH-1:
             #Check if collition with Player 2 paddle
-            paddleCollition(2)
+            if paddleCollition(2)==True:
+                buzz=True
     
         #Bounce (reverse y direction) if reaching top or bottom
         if ball["yPos"]>DISPLAY_HEIGHT-1 or ball["yPos"]<1:
             ball["yDir"]=0-ball["yDir"]
+            buzz=True
 
         #Update ball position with current direction
         ball["xPos"]+=ball["xDir"]
         ball["yPos"]+=ball["yDir"]
         
+        
+        if buzz==True:
+            buzzer.value(1)
         #Reset OLED
         oled.fill(0)
         
@@ -175,6 +187,6 @@ def gameLoop():
 
         #Display everything that's been drawn
         oled.show()
-
+        buzzer.value(0)
 #Initialize
 init()
