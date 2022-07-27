@@ -1,6 +1,9 @@
 # PicoPong
 Pong-typ game using a Raspberry Pi Pico and a SSD1306 OLED Screen
 
+![IMG_6264](https://user-images.githubusercontent.com/11849451/181356213-cd1c9c82-63ec-49a1-8e19-0651a4f1ef39.jpeg)
+
+
 ## Overview
 This is a 2-player Pong-type game forRaspberry Pi Pico, using an I2C OLED Screen for output and two Potentiometers as controllers.
 
