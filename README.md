@@ -22,6 +22,11 @@ Jumper Cables
 1x Bread Board  
 1x AA Battery Holder  
 
+For sound:  
+1x Active Buzzer  
+1x NPN Transistor (S8050 or similar)
+1x 1k Resistor
+
 ## How to wire everything up.
 
 ### SSD1306 OLED Screen
@@ -47,6 +52,17 @@ GND (Pin3) -> GND
 
 Pin 1 -> 3V3  
 Pin 2 -> Pin 22 + GND via 10k Resistor (pull down)   
+
+### Battery
+Plus -> Vbus  
+Minus -> GND  
+
+### Buzzer
+Plus -> Vbus  
+Minus -  Collector of S8050  
+
+S8050 Base -> Pin 15 via 1k Resistor  
+S8080 Emitter -> GND  
 
 ## Software Requirements
 You need the micropython-ssd1306 OLED driver in order to run the code.
